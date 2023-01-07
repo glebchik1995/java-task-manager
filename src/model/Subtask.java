@@ -3,14 +3,14 @@ package model;
 import java.util.Objects;
 
 public class Subtask extends Task {
-    final private int epicId;
+    private final int epicId;
 
-    public Subtask(String title, String description, String status, int epicId) {
-        super(title, description, status);
+    public Subtask(String title, String description, StatusEnum status, int epicId) {
+        super(0, title, description, status);
         this.epicId = epicId;
     }
 
-    public int getEpicId() {
+    public Integer getEpicId() {
         return epicId;
     }
 
@@ -25,18 +25,17 @@ public class Subtask extends Task {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(super.hashCode(), epicId);
     }
 
     @Override
     public String toString() {
-        return "Subtask{" +
-                " title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status='" + status + '\'' +
+        return "Subtask{ " +
+                "id=" + getId() +
+                ", title='" + getTitle() + '\'' +
+                ", description='" + getDescription() + '\'' +
                 ", epicId=" + epicId +
-                '}';
+                ", status='" + getStatus() +
+                "'}";
     }
 }
