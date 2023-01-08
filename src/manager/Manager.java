@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import model.StatusEnum;
 import model.Task;
 import model.Subtask;
 import model.Epic;
@@ -21,7 +22,7 @@ public class Manager implements TaskManager {
         this.tasks = new HashMap<>();
         this.subtasks = new HashMap<>();
         this.epics = new HashMap<>();
-        this.generatorId = generatorId;
+        this.generatorId = 1;
     }
 
     /**
@@ -30,22 +31,18 @@ public class Manager implements TaskManager {
     @Override
     // Получение списка всех задач
     public List<Task> getTasks() {
-        List<Task> list = new ArrayList<>();
-        for (Integer task : tasks.keySet()) {
-            list.add(tasks.get(task));
-        }
-        return list;
+        return new ArrayList<>(this.tasks.values());
     }
 
     @Override
     // Удаление всех задач
-    public void removeTasks() {
+    public void deleteTasks() {
         tasks.clear();
     }
 
     @Override
     // Получение задачи по индетификатору
-    public Task getTask(int id) {
+    public Task getTaskById(int id) {
         return tasks.get(id);
     }
 
@@ -64,8 +61,8 @@ public class Manager implements TaskManager {
 
     @Override
     // Удаление задачи по индетификатору
-    public void removeTask(int id) {
-        if (tasks.containsKey(id)) {
+    public void deleteTask(int id) {
+        if (this.tasks.containsKey(id)) {
             tasks.remove(id);
         }
     }
@@ -76,23 +73,19 @@ public class Manager implements TaskManager {
     @Override
     // Получение списка всех Эпиков
     public List<Epic> getEpics() {
-        List<Epic> list = new ArrayList<>();
-        for (Integer task : epics.keySet()) {
-            list.add(epics.get(task));
-        }
-        return list;
+        return new ArrayList<>(this.epics.values());
     }
 
     @Override
     // Удаление всех Эпиков
-    public void removeEpics() {
+    public void deleteEpics() {
         epics.clear();
         subtasks.clear();
     }
 
     @Override
     // Получение Эпиков по индетификатору
-    public Epic getEpic(int id) {
+    public Epic getEpicById(int id) {
         return epics.get(id);
     }
 
@@ -110,53 +103,46 @@ public class Manager implements TaskManager {
     @Override
     // Обновление Эпика
     public void updateEpic(Epic epic) {
-        Epic oldEpic = epics.get(epic.getId());
-        for (Integer idSubtask : oldEpic.getSubtasksId()) {
-            epics.remove(idSubtask);
+
+        final Epic epicSaved = epics.get(epic.getId());
+        if (epicSaved == null) {
+            return;
         }
+        epicSaved.setTitle(epic.getTitle());
+        epicSaved.setDescription(epic.getDescription());
+
     }
 
     @Override
     // Удаление Эпика по индетификатору
-    public void removeEpic(int id) {
-        for (Integer key : subtasks.keySet()) {
-            if (Objects.equals(subtasks.get(key).getEpicId(), id)) {
-                subtasks.remove(key);
-                if (subtasks.size() <= 1) {
-                    subtasks.clear();
-                    break;
-                }
-            }
+    public void deleteEpicById(int id) {
+        final Epic epic = epics.remove(id);
+        for (Integer subtask : epic.getSubtasksId()) {
+            subtasks.remove(subtask);
         }
-        epics.remove(id);
     }
 
-    private void updateEpicStatus(int epicId) {
-
-        int NewCount = 0;
-        int DoneCount = 0;
-        int subtaskCount = epics.get(epicId).getSubtasksId().size();
-
-        for (int subtaskId : epics.get(epicId).getSubtasksId()) {
-            if (subtasks.get(subtaskId).getStatus() == NEW) {
-                NewCount++;
-            } else if (subtasks.get(subtaskId).getStatus() == DONE) {
-                DoneCount++;
-            }
-        }
-        if (NewCount == subtaskCount || subtaskCount == 0) {
-            Epic epic = epics.get(epicId);
+    private void updateEpicStatus(Epic epic) {
+        List<Integer> subs = epic.getSubtasksId();
+        if (subs.isEmpty()) {
             epic.setStatus(NEW);
-            epics.put(epicId, epic);
-        } else if (DoneCount == subtaskCount) {
-            Epic epic = epics.get(epicId);
-            epic.setStatus(DONE);
-            epics.put(epicId, epic);
-        } else {
-            Epic epic = epics.get(epicId);
-            epic.setStatus(IN_PROGRESS);
-            epics.put(epicId, epic);
+            return;
         }
+        StatusEnum status = null;
+        for (int id : subs) {
+            final Subtask subtask = subtasks.get(id);
+            if (status == null) {
+                status = subtask.getStatus();
+                continue;
+            }
+            if (status == subtask.getStatus()
+                    && status != IN_PROGRESS) {
+                continue;
+            }
+            epic.setStatus(IN_PROGRESS);
+            return;
+        }
+        epic.setStatus(status);
     }
 
     /**
@@ -175,22 +161,22 @@ public class Manager implements TaskManager {
     @Override
     // Получение списка всех Подзадач
     public List<Subtask> getSubtasks() {
-        List<Subtask> list = new ArrayList<>();
-        for (Integer task : subtasks.keySet()) {
-            list.add(subtasks.get(task));
-        }
-        return list;
+        return new ArrayList<>(this.subtasks.values());
     }
 
     @Override
-    // Удаление всех Подзадач
-    public void removeSubtasks() {
+//    // Удаление всех подзадач
+    public void deleteSubtasks() {
         subtasks.clear();
+        for (Epic epic : epics.values()) {
+            epic.getSubtasksId().clear();
+            updateEpicStatus(epic);
+        }
     }
 
     @Override
     // Получение Подзадач по индетификатору
-    public Subtask getSubtask(int id) {
+    public Subtask getSubtaskById(int id) {
         return subtasks.get(id);
     }
 
@@ -213,13 +199,20 @@ public class Manager implements TaskManager {
         subtasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getEpicId());
         updateSubtasks(epic);
-        updateEpicStatus(subtask.getEpicId());
+        updateEpicStatus(epic);
     }
 
     @Override
     // Удаление Подзадачи по индетификатору
-    public void removeSubtask(int id) {
-        subtasks.remove(id);
+    public void deleteSubtaskById(int id) {
+        if (this.subtasks.containsKey(id)) {
+            Subtask subtask = this.getSubtaskById(id);
+            int ids = this.subtasks.get(id).getEpicId();
+            Epic epic = this.getEpicById(ids);
+            epic.getSubtasksId().remove(subtask);
+            this.subtasks.remove(id);
+        }
+
     }
 
     @Override
@@ -235,11 +228,4 @@ public class Manager implements TaskManager {
         return epic.getSubtasksId();
     }
 
-    public int getGeneratorId() {
-        return generatorId;
-    }
-
-    public void setGeneratorId(int generatorId) {
-        this.generatorId = generatorId;
-    }
 }

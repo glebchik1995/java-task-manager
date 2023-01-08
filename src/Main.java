@@ -3,6 +3,7 @@ import model.StatusEnum;
 import model.Subtask;
 import model.Task;
 import model.Epic;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -50,7 +51,7 @@ public class Main {
         manager.creationSubtask(subtask1);
 
         Subtask subtask2 = new Subtask("Накрыть на стол", "На 8 человек",
-                StatusEnum.NEW,epic1.getId());
+                StatusEnum.NEW, epic1.getId());
 
         manager.creationSubtask(subtask2);
 
@@ -91,7 +92,7 @@ public class Main {
 
         System.out.println("Удаляем задачу");
 
-        manager.removeTask(simpleTask3.getId());
+        manager.deleteTask(simpleTask3.getId());
 
         System.out.println("Список задач после удаления задачи: " +
                 manager.getTasks().toString());
@@ -100,7 +101,7 @@ public class Main {
 
         System.out.println("Удаляем Эпик");
 
-        manager.removeEpic(epic2.getId());
+        manager.deleteEpicById(epic2.getId());
 
         System.out.println("Список эпиков после удаления эпика: " +
                 manager.getEpics().toString());
@@ -112,10 +113,16 @@ public class Main {
 
         System.out.println("Удаляем подзадачу");
 
-        manager.removeSubtask(subtask1.getId());
+        manager.deleteSubtaskById(subtask1.getId());
 
         System.out.println("Список подзадач после удаления: " +
                 manager.getSubtasks().toString());
 
+        System.out.println();
+
+        manager.deleteSubtasks();
+
+        System.out.println("Список подзадач после удаления: " +
+                manager.getSubtasks().toString());
     }
 }
