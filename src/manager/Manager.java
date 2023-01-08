@@ -3,7 +3,6 @@ package manager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import model.StatusEnum;
 import model.Task;
@@ -211,6 +210,7 @@ public class Manager implements TaskManager {
             Epic epic = this.getEpicById(ids);
             epic.getSubtasksId().remove(subtask);
             this.subtasks.remove(id);
+
         }
 
     }
