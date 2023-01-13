@@ -1,4 +1,5 @@
-import manager.Manager;
+import manager.Managers;
+import manager.TaskManager;
 import model.StatusEnum;
 import model.Subtask;
 import model.Task;
@@ -7,64 +8,49 @@ import model.Epic;
 public class Main {
     public static void main(String[] args) {
 
-        Manager manager = new Manager();
+        TaskManager manager = Managers.getDefault();
 
         System.out.println("Менеджер задач: ");
 
         System.out.println();
 
-        Task simpleTask1 = new Task("Встать на работу", "в 6 утра",
-                StatusEnum.NEW);
+        Task simpleTask1 = new Task("Сделать 1-й проект в Я.Практикуме",
+                "Сдать любой ценой!", StatusEnum.NEW);
+        Task simpleTask2 = new Task("Сделать 2-й проект в Я.Практикуме",
+                "Сдать любой ценой!", StatusEnum.NEW);
+        Task simpleTask3 = new Task("Сделать 3-й проект в Я.Практикуме",
+                "Сдать любой ценой!", StatusEnum.NEW);
 
         manager.creationTask(simpleTask1);
-
-        Task simpleTask2 = new Task("Выходной день", "Спать до 12",
-                StatusEnum.NEW);
-
         manager.creationTask(simpleTask2);
+        manager.creationTask(simpleTask3);
 
         System.out.println("Список задач до обновления: " +
                 manager.getTasks().toString());
-
-        simpleTask1.setStatus(StatusEnum.IN_PROGRESS);
-
         System.out.println();
 
-        Task simpleTask3 = new Task(simpleTask1.getId(), "Новый год", "Хорошо отметить и лечь спать",
-                StatusEnum.IN_PROGRESS);
+        Task simpleTask4 = new Task(simpleTask1.getId(),"Сделать 4-й проект в Я.Практикуме",
+                "Сдать любой ценой!", StatusEnum.DONE);
 
-        manager.updateTask(simpleTask3);
-
+        manager.updateTask(simpleTask4);
         System.out.println("Список задач после обновления: " +
                 manager.getTasks().toString());
-
         System.out.println();
 
-        Epic epic1 = new Epic("Отпраздновать Новый год", "В кругу семьи");
-
+        Epic epic1 = new Epic("Сделать 5-й проект в Я.Практикуме", "Сдать любой ценой!");
         manager.creationEpic(epic1);
-
-
-        Subtask subtask1 = new Subtask("Нарядить елку", "Красными и синими шарами",
-                StatusEnum.NEW, epic1.getId());
-
+        Subtask subtask1 = new Subtask("Разобраться в комментариях ревьюера",
+                "Исправить ошибки", StatusEnum.NEW, epic1.getId());
         manager.creationSubtask(subtask1);
-
-        Subtask subtask2 = new Subtask("Накрыть на стол", "На 8 человек",
+        Subtask subtask2 = new Subtask("Повторно отправить на ревью", "Добавить commit",
                 StatusEnum.NEW, epic1.getId());
-
         manager.creationSubtask(subtask2);
 
-        Epic epic2 = new Epic("Пойти в спорт зал", "Кардио тренировка");
-
+        Epic epic2 = new Epic("Каникулы", "отдохнуть от учебы");
         manager.creationEpic(epic2);
-
-        Subtask subtask3 = new Subtask("Сделать присяд", "3 подхода по 7 раз",
-                StatusEnum.DONE, epic2.getId());
-
+        Subtask subtask3 = new Subtask("Посмотреть любимый сериал",
+                "Дом дракона", StatusEnum.NEW, epic2.getId());
         manager.creationSubtask(subtask3);
-
-        manager.updateEpic(epic1);
 
         System.out.println("Статус epic1 " +
                 epic1.getStatus());
@@ -89,6 +75,24 @@ public class Main {
                 manager.getSubtaskByEpicId(epic2.getId()).toString());
 
         System.out.println();
+
+
+        System.out.println("Просматриваем задачи....хм...");
+        manager.getTaskById(simpleTask1.getId());
+        manager.getTaskById(simpleTask2.getId());
+        manager.getTaskById(simpleTask3.getId());
+        manager.getTaskById(simpleTask4.getId());
+        manager.getEpicById(epic1.getId());
+        manager.getSubtaskById(subtask1.getId());
+        manager.getSubtaskById(subtask2.getId());
+        manager.getEpicById(epic2.getId());
+        manager.getSubtaskById(subtask3.getId());
+        System.out.println();
+
+        System.out.println("Показать историю : " + manager.history());
+        System.out.println();
+
+//        historyManager.add(simpleTask1);
 
         System.out.println("Удаляем задачу");
 
@@ -115,14 +119,16 @@ public class Main {
 
         manager.deleteSubtaskById(subtask1.getId());
 
-        System.out.println("Список подзадач после удаления: " +
+        System.out.println("Список подзадач после удаления подзадачи: " +
                 manager.getSubtasks().toString());
 
         System.out.println();
 
+        System.out.println("Удаляем все имеющиеся подзадачи");
         manager.deleteSubtasks();
 
-        System.out.println("Список подзадач после удаления: " +
+        System.out.println("Список подзадач после удаления всех имеющихся подзадач: " +
                 manager.getSubtasks().toString());
+
     }
 }

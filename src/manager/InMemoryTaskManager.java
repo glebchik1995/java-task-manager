@@ -11,55 +11,74 @@ import model.Epic;
 
 import static model.StatusEnum.*;
 
-public class Manager implements TaskManager {
-    private final HashMap<Integer, Task> tasks;
-    private final HashMap<Integer, Subtask> subtasks;
-    private final HashMap<Integer, Epic> epics;
+public class InMemoryTaskManager implements TaskManager {
+    private HashMap<Integer, Task> tasks;
+    private HashMap<Integer, Subtask> subtasks;
+    private HashMap<Integer, Epic> epics;
+    private InMemoryHistoryManager historyManager;
     private int generatorId;
 
-    public Manager() {
-        this.tasks = new HashMap<>();
-        this.subtasks = new HashMap<>();
-        this.epics = new HashMap<>();
-        this.generatorId = 1;
+    public InMemoryTaskManager() {
+        tasks = new HashMap<>();
+        subtasks = new HashMap<>();
+        epics = new HashMap<>();
+        historyManager = new InMemoryHistoryManager();
+        this.generatorId = 0;
+    }
+    /**
+     * Получение списка истории задач
+     */
+    @Override
+    public List<Task> history() {
+        return historyManager.getHistory();
     }
 
     /**
-     * Tasks
+     * Получение списка всех задач
      */
     @Override
-    // Получение списка всех задач
-    public List<Task> getTasks() {
-        return new ArrayList<>(this.tasks.values());
+    public HashMap<Integer, Task> getTasks() {
+        return tasks;
     }
 
+    /**
+     * // Удаление всех задач
+     */
     @Override
-    // Удаление всех задач
     public void deleteTasks() {
         tasks.clear();
     }
 
+    /**
+     * // Получение задачи по индетификатору
+     */
     @Override
-    // Получение задачи по индетификатору
     public Task getTaskById(int id) {
+        historyManager.add(tasks.get(id));
         return tasks.get(id);
     }
 
+    /**
+     * // Создание Задачи
+     */
     @Override
-    // Создание Задачи
     public void creationTask(Task task) {
         task.setId(++generatorId);
         tasks.put(task.getId(), task);
     }
 
+    /**
+     * // Обновление Задачи
+     */
     @Override
-    // Обновление Задачи
     public void updateTask(Task task) {
         tasks.put(task.getId(), task);
     }
 
+    /**
+     * // Удаление задачи по индетификатору
+     */
     @Override
-    // Удаление задачи по индетификатору
     public void deleteTask(int id) {
         if (this.tasks.containsKey(id)) {
             tasks.remove(id);
@@ -71,8 +90,8 @@ public class Manager implements TaskManager {
      */
     @Override
     // Получение списка всех Эпиков
-    public List<Epic> getEpics() {
-        return new ArrayList<>(this.epics.values());
+    public HashMap<Integer, Epic> getEpics() {
+        return epics;
     }
 
     @Override
@@ -85,6 +104,7 @@ public class Manager implements TaskManager {
     @Override
     // Получение Эпиков по индетификатору
     public Epic getEpicById(int id) {
+        historyManager.add(epics.get(id));
         return epics.get(id);
     }
 
@@ -159,8 +179,8 @@ public class Manager implements TaskManager {
 
     @Override
     // Получение списка всех Подзадач
-    public List<Subtask> getSubtasks() {
-        return new ArrayList<>(this.subtasks.values());
+    public HashMap<Integer, Subtask> getSubtasks() {
+        return subtasks;
     }
 
     @Override
@@ -176,6 +196,7 @@ public class Manager implements TaskManager {
     @Override
     // Получение Подзадач по индетификатору
     public Subtask getSubtaskById(int id) {
+        historyManager.add(subtasks.get(id));
         return subtasks.get(id);
     }
 
@@ -210,7 +231,6 @@ public class Manager implements TaskManager {
             Epic epic = this.getEpicById(ids);
             epic.getSubtasksId().remove(subtask);
             this.subtasks.remove(id);
-
         }
 
     }

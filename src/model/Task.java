@@ -24,15 +24,14 @@ public class Task {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Task)) return false;
-        Task задача = (Task) o;
-        return id == задача.id && Objects.equals(title, задача.title) &&
-                Objects.equals(description, задача.description) && Objects.equals(status, задача.status);
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id && Objects.equals(title, task.title) && Objects.equals(description, task.description) && status == task.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, id, status);
+        return Objects.hash(id, title, description, status);
     }
 
     public String getTitle() {
