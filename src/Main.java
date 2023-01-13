@@ -76,7 +76,6 @@ public class Main {
 
         System.out.println();
 
-
         System.out.println("Просматриваем задачи....хм...");
         manager.getTaskById(simpleTask1.getId());
         manager.getTaskById(simpleTask2.getId());
@@ -91,8 +90,6 @@ public class Main {
 
         System.out.println("Показать историю : " + manager.history());
         System.out.println();
-
-//        historyManager.add(simpleTask1);
 
         System.out.println("Удаляем задачу");
 
