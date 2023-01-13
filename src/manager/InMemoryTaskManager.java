@@ -3,6 +3,7 @@ package manager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.StatusEnum;
 import model.Task;
@@ -12,9 +13,9 @@ import model.Epic;
 import static model.StatusEnum.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private HashMap<Integer, Task> tasks;
-    private HashMap<Integer, Subtask> subtasks;
-    private HashMap<Integer, Epic> epics;
+    private Map<Integer, Task> tasks;
+    private Map<Integer, Subtask> subtasks;
+    private Map<Integer, Epic> epics;
     private InMemoryHistoryManager historyManager;
     private int generatorId;
 
@@ -37,9 +38,10 @@ public class InMemoryTaskManager implements TaskManager {
      * Получение списка всех задач
      */
     @Override
-    public HashMap<Integer, Task> getTasks() {
-        return tasks;
+    public List<Task> getTasks() {
+        return new ArrayList<>(this.tasks.values());
     }
+
 
     /**
      * // Удаление всех задач
@@ -90,8 +92,8 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     // Получение списка всех Эпиков
-    public HashMap<Integer, Epic> getEpics() {
-        return epics;
+    public List<Epic> getEpics() {
+        return new ArrayList<>(this.epics.values());
     }
 
     @Override
@@ -170,17 +172,17 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     // Получение списка Подзадачи по индитификатору Эпика
     public List<Subtask> getSubtaskByEpicId(int id) {
-        List<Subtask> list = new ArrayList<>();
+        List<Subtask> subtask = new ArrayList<>();
         for (Integer currentSubtask : epics.get(id).getSubtasksId()) {
-            list.add(subtasks.get(currentSubtask));
+            subtask.add(subtasks.get(currentSubtask));
         }
-        return list;
+        return subtask;
     }
 
     @Override
     // Получение списка всех Подзадач
-    public HashMap<Integer, Subtask> getSubtasks() {
-        return subtasks;
+    public List<Subtask> getSubtasks() {
+        return new ArrayList<>(this.subtasks.values());
     }
 
     @Override

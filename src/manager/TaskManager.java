@@ -18,7 +18,7 @@ public interface TaskManager {
      * Tasks
      */
 
-    HashMap<Integer, Task> getTasks();
+    List<Task> getTasks();
 
     void deleteTasks();
 
@@ -34,7 +34,7 @@ public interface TaskManager {
      * Epics
      */
 
-    HashMap<Integer, Epic> getEpics();
+    List<Epic> getEpics();
 
     void deleteEpics();
 
@@ -52,7 +52,7 @@ public interface TaskManager {
 
     List<Subtask> getSubtaskByEpicId(int id);
 
-    HashMap<Integer, Subtask> getSubtasks();
+    List<Subtask> getSubtasks();
 
     void deleteSubtasks();
 
