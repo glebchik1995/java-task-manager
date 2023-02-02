@@ -13,19 +13,14 @@ import model.Epic;
 import static model.StatusEnum.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private Map<Integer, Task> tasks;
-    private Map<Integer, Subtask> subtasks;
-    private Map<Integer, Epic> epics;
-    private InMemoryHistoryManager historyManager;
-    private int generatorId;
+    private Map<Integer, Task> tasks = new HashMap<>();
+    private Map<Integer, Subtask> subtasks = new HashMap<>();
+    ;
+    private Map<Integer, Epic> epics = new HashMap<>();
+    ;
+    private HistoryManager historyManager = Managers.getDefaultHistory();
+    private int generatorId = 0;
 
-    public InMemoryTaskManager() {
-        tasks = new HashMap<>();
-        subtasks = new HashMap<>();
-        epics = new HashMap<>();
-        historyManager = new InMemoryHistoryManager();
-        this.generatorId = 0;
-    }
     /**
      * Получение списка истории задач
      */
@@ -82,8 +77,9 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public void deleteTask(int id) {
-        if (this.tasks.containsKey(id)) {
+        if (tasks.containsKey(id)) {
             tasks.remove(id);
+            historyManager.remove(id);
         }
     }
 
@@ -138,8 +134,9 @@ public class InMemoryTaskManager implements TaskManager {
     // Удаление Эпика по индетификатору
     public void deleteEpicById(int id) {
         final Epic epic = epics.remove(id);
-        for (Integer subtask : epic.getSubtasksId()) {
-            subtasks.remove(subtask);
+        for (Integer subtaskId : epic.getSubtasksId()) {
+            subtasks.remove(subtaskId);
+            historyManager.remove(subtaskId);
         }
     }
 
@@ -233,6 +230,7 @@ public class InMemoryTaskManager implements TaskManager {
             Epic epic = this.getEpicById(ids);
             epic.getSubtasksId().remove(subtask);
             this.subtasks.remove(id);
+            historyManager.remove(id);
         }
 
     }
