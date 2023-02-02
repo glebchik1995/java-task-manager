@@ -73,7 +73,10 @@ public class Main {
 
         System.out.println("Показать историю : " + manager.history());
 
+        System.out.println("Удаляем все Эпики");
+        manager.deleteEpics();
         System.out.println();
+        System.out.println("Показать историю : " + manager.history());
 
     }
 }
