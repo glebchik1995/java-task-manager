@@ -1,12 +1,17 @@
 package model;
 
-import java.util.Objects;
+import manager.Types;
 
+import java.util.Objects;
 public class Subtask extends Task {
     private final int epicId;
 
-    public Subtask(String title, String description, StatusEnum status, int epicId) {
-        super(0, title, description, status);
+    public Subtask(int id, String title, Status status, String description, int epicId) {
+        super(id, title,status, description);
+        this.epicId = epicId;
+    }
+    public Subtask(String title, String description, Status status, int epicId) {
+        super(title, description, status);
         this.epicId = epicId;
     }
 
@@ -30,12 +35,8 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{ " +
-                "id=" + getId() +
-                ", title='" + getTitle() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", epicId=" + epicId +
-                ", status='" + getStatus() +
-                "'}";
+        return getId() + "," + Types.SUBTASK + "," +
+                getTitle() + "," + getStatus() + "," + getDescription() + "," + getEpicId();
     }
+
 }

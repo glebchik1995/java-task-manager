@@ -4,8 +4,8 @@ import model.Task;
 import model.Subtask;
 import model.Epic;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface TaskManager {
 
@@ -58,7 +58,13 @@ public interface TaskManager {
 
     Subtask getSubtaskById(int id);
 
-    int creationSubtask(Subtask subtask);
+    void creationSubtask(Subtask subtask);
+
+    Map<Integer, Epic> getEpicsMap();
+
+    Map<Integer, Task> getTasksMap();
+
+    Map<Integer, Subtask> getSubtasksMap();
 
     void updateSubtask(Subtask subtask);
 

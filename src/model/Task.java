@@ -1,21 +1,25 @@
 package model;
 
+import manager.Types;
+
 import java.util.Objects;
 
 public class Task {
-    protected int id;
-    protected String title;
-    protected String description;
-    protected StatusEnum status;
+    private int id;
+    private String title;
+    private String description;
+    private Status status;
+    private Types type;
 
-    public Task(int id, String title, String description, StatusEnum status) {
+    public Task(int id, String title, Status status, String description) {
         this.id = id;
+        this.type = Types.TASK;
         this.title = title;
         this.description = description;
         this.status = status;
     }
 
-    public Task(String title, String description, StatusEnum status) {
+    public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -58,22 +62,21 @@ public class Task {
         this.id = id;
     }
 
-    public StatusEnum getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StatusEnum status) {
+    public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Types getType() {
+        return type;
     }
 
     @Override
     public String toString() {
-        return "Task{ " +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+        return getId() + "," + Types.TASK + "," +
+                getTitle() + "," + getStatus() + "," + getDescription();
     }
-
 }

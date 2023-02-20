@@ -1,5 +1,7 @@
 package model;
 
+import manager.Types;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,8 +10,12 @@ public class Epic extends Task {
     private List<Integer> subtasksId;
 
     public Epic(String title, String description) {
-        super(title, description, StatusEnum.NEW);
+        super(title, description, Status.NEW);
         this.subtasksId = new ArrayList<>();
+    }
+
+    public Epic(int id, String title, Status status, String description) {
+        super(id, title, status, description);
     }
 
     public List<Integer> getSubtasksId() {
@@ -36,12 +42,9 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Epic{ " +
-                "id=" + getId() +
-                ", title='" + getTitle() + '\'' +
-                ", description='" + getDescription() + "'" +
-                ", subtasksIds=" + subtasksId +
-                ", status='" + getStatus() + "'" +
-                '}';
+        return getId() +
+                "," + Types.EPIC + "," +
+                getTitle() + "," + getStatus() + "," + getDescription();
     }
+
 }
