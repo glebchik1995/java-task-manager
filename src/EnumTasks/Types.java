@@ -1,4 +1,4 @@
-package manager;
+package EnumTasks;
 
 public enum Types {
     TASK,

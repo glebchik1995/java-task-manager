@@ -1,8 +1,8 @@
 package manager;
 
-import model.Task;
-import model.Subtask;
-import model.Epic;
+import Tasks.Task;
+import Tasks.Subtask;
+import Tasks.Epic;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public interface TaskManager {
 
     void updateTask(Task task);
 
-    void deleteTask(int id);
+    void deleteTaskById(int id);
 
     /**
      * Epics
@@ -40,11 +40,15 @@ public interface TaskManager {
 
     Epic getEpicById(int id);
 
-    int creationEpic(Epic epic);
+    void creationEpic(Epic epic);
 
     void updateEpic(Epic epic);
 
     void deleteEpicById(int id);
+
+    void updateStatusEpic(Epic epic);
+
+    void updateTimeEpic(Epic epic);
 
     /**
      * Subtasks
@@ -58,7 +62,7 @@ public interface TaskManager {
 
     Subtask getSubtaskById(int id);
 
-    void creationSubtask(Subtask subtask);
+    Subtask creationSubtask(Subtask subtask);
 
     Map<Integer, Epic> getEpicsMap();
 
@@ -70,6 +74,10 @@ public interface TaskManager {
 
     void deleteSubtaskById(int id);
 
-    List<Integer> updateSubtasks(Epic epic);
+    void updateStartTimeAndDurationForEpic(Epic epic);
+
+    void timeReconciliation(Task task);
+
+    List<Task> getPrioritizedTasks();
 }
 

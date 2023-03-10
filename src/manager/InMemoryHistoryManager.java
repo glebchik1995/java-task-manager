@@ -1,6 +1,6 @@
 package manager;
 
-import model.Task;
+import Tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,10 +92,10 @@ public class InMemoryHistoryManager implements HistoryManager {
             if (tail == node && head != node) {
                 tail = prev;
                 tail.next = null;
-            } else if (tail == node && head == node) {
+            } else if (tail == node) {
                 tail = null;
                 head = null;
-            } else if (tail != node && head != node) {
+            } else if (head != node) {
                 next.prev = prev;
                 prev.next = next;
             } else {
