@@ -57,10 +57,10 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return getId() + "," + Types.EPIC + "," +
-                getTitle() + "," + getStatus() + "," + getDescription() + ", " +
+                getTitle() + "," + getStatus() + "," + getDescription() + "," +
                 getStartTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")) + "," +
-                getEndTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")) +
-                "," + getDuration().toMinutes();
+                getEndTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")) + "," +
+                getDuration().toMinutes();
     }
 
 }

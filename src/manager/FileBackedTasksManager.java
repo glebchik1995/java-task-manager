@@ -27,7 +27,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     List<Integer> historyList = new ArrayList<>();
 
     public FileBackedTasksManager(File file) throws ManagerSaveException {
-        super(Managers.getDefaultHistory());
         this.file = file;
         file = new File("sprint7.csv");
         if (!file.exists()) {

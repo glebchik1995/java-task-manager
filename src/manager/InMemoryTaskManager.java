@@ -15,10 +15,9 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
 
-    public InMemoryTaskManager(HistoryManager historyManager) {
-        this.historyManager = historyManager;
+    public InMemoryTaskManager() {
+        this.historyManager = Managers.getDefaultHistory();
     }
-
     @Override
     public Map<Integer, Task> getTasksMap() {
         return tasks;
@@ -42,6 +41,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final Comparator<Task> taskComparator = Comparator.comparing(Task::getStartTime);
     private final Set<Task> prioritizedTasks = new TreeSet<>(taskComparator);
     private int counterId = 0;
+
 
     /*
       Tasks ↓ ↓ ↓
