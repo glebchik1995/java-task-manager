@@ -1,5 +1,3 @@
-package test;
-
 import enumTask.Status;
 import task.Task;
 import manager.HistoryManager;

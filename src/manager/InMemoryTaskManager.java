@@ -400,34 +400,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateStartTimeAndDurationForEpic(Epic epic) {
-
-        List<Subtask> subtasksByEpic = getSubtaskByEpicId(epic.getId());
-        for (Subtask subTask : subtasksByEpic) {
-            if (subTask.getStartTime() == null) {
-                return;
-            }
-        }
-        if (!subtasksByEpic.isEmpty()) {
-
-            LocalDateTime maxEndTime = subtasksByEpic.stream()
-                    .map(Subtask::getEndTime).max(LocalDateTime::compareTo).get();
-            LocalDateTime minStartTime = subtasksByEpic.stream()
-                    .map(Subtask::getStartTime).min(LocalDateTime::compareTo).get();
-
-            epic.setEndTime(maxEndTime);
-            epic.setStartTime(minStartTime);
-
-            epic.setDuration(Duration.between(minStartTime, maxEndTime));
-        }
-        if (subtasksByEpic.isEmpty()) {
-            epic.setStartTime(null);
-            epic.setEndTime(null);
-            epic.setDuration(null);
-        }
-    }
-
-    @Override
     public void timeReconciliation(Task task) throws ManagerValidateException {
         LocalDateTime startTime = task.getStartTime();
 
@@ -436,17 +408,18 @@ public class InMemoryTaskManager implements TaskManager {
                 return;
             }
             boolean conditionStartTime = task.getStartTime().isEqual(prioritizedTask.getStartTime());
-            boolean conditionEndTime = task.getEndTime().isEqual(prioritizedTask.getEndTime());
+            boolean conditionEndTime = task.getEndTime().isEqual(prioritizedTask.getStartTime());
             if (conditionStartTime && conditionEndTime) {
-                return;
-                }
+                throw new RuntimeException("Ошибка пересечения задач по времени");
             }
         }
+    }
 
     private void addNewPrioritizedTask(Task task) {
         prioritizedTasks.add(task);
         timeReconciliation(task);
     }
+
     @Override
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);

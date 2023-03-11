@@ -74,8 +74,6 @@ public interface TaskManager {
 
     void deleteSubtaskById(int id);
 
-    void updateStartTimeAndDurationForEpic(Epic epic);
-
     void timeReconciliation(Task task);
 
     List<Task> getPrioritizedTasks();
