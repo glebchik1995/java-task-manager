@@ -43,22 +43,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
             Map<Integer, String> allTasks = new HashMap<>();
 
-            Map<Integer, Task> tasks = getTasksMap();
-
-            Map<Integer, Epic> epics = getEpicsMap();
-
-            Map<Integer, Subtask> subtasks = getSubtasksMap();
-
-            for (Integer id : tasks.keySet()) {
-                allTasks.put(id, tasks.get(id).toString());
+            for (Integer id : getTasksMap().keySet()) {
+                allTasks.put(id, getTasksMap().get(id).toString());
             }
 
-            for (Integer id : epics.keySet()) {
-                allTasks.put(id, epics.get(id).toString());
+            for (Integer id : getEpicsMap().keySet()) {
+                allTasks.put(id, getEpicsMap().get(id).toString());
             }
 
-            for (Integer id : subtasks.keySet()) {
-                allTasks.put(id, subtasks.get(id).toString());
+            for (Integer id : getSubtasksMap().keySet()) {
+                allTasks.put(id, getSubtasksMap().get(id).toString());
             }
 
             for (String value : allTasks.values()) {
