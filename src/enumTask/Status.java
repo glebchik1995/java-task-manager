@@ -1,4 +1,4 @@
-package EnumTasks;
+package enumTask;
 
 public enum Status {
     NEW,

@@ -1,7 +1,7 @@
-package Tasks;
+package task;
 
-import EnumTasks.Status;
-import EnumTasks.Types;
+import enumTask.Status;
+import enumTask.Types;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

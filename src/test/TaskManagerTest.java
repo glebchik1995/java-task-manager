@@ -1,9 +1,9 @@
-package TestProject;
+package test;
 
-import EnumTasks.Status;
-import Tasks.Epic;
-import Tasks.Subtask;
-import Tasks.Task;
+import enumTask.Status;
+import task.Epic;
+import task.Subtask;
+import task.Task;
 import manager.TaskManager;
 import org.junit.jupiter.api.Test;
 

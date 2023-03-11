@@ -1,7 +1,7 @@
-package TestProject;
+package test;
 
-import EnumTasks.Status;
-import Tasks.Task;
+import enumTask.Status;
+import task.Task;
 import manager.HistoryManager;
 import manager.InMemoryHistoryManager;
 import org.junit.jupiter.api.BeforeEach;

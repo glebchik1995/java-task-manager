@@ -1,10 +1,10 @@
 package manager;
 
-import Tasks.Epic;
-import EnumTasks.Status;
-import Tasks.Subtask;
-import Tasks.Task;
-import EnumTasks.Types;
+import task.Epic;
+import enumTask.Status;
+import task.Subtask;
+import task.Task;
+import enumTask.Types;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -25,12 +25,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     Map<Integer, Task> epicMap = new HashMap<>();
     Map<Integer, Task> subtasksMap = new HashMap<>();
     List<Integer> historyList = new ArrayList<>();
-    public FileBackedTasksManager(HistoryManager historyManager, File file) {
-        super(historyManager);
-        this.file = file;
-    }
 
     public FileBackedTasksManager(File file) throws ManagerSaveException {
+        super(Managers.getDefaultHistory());
         this.file = file;
         file = new File("sprint7.csv");
         if (!file.exists()) {
@@ -71,7 +68,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 fileWriter.append(value).append("\n");
             }
             fileWriter.append("\n");
-            fileWriter.append(historyToString(historyManager));
+            fileWriter.append(historyToString(getHistoryManager()));
         } catch (IOException e) {
             throw new ManagerSaveException("Не удалось внести запись в файл.");
         }

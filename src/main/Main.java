@@ -1,10 +1,10 @@
-package Main;
+package main;
 
 import manager.FileBackedTasksManager;
-import EnumTasks.Status;
-import Tasks.Subtask;
-import Tasks.Task;
-import Tasks.Epic;
+import enumTask.Status;
+import task.Subtask;
+import task.Task;
+import task.Epic;
 
 import java.io.File;
 import java.time.Duration;
@@ -65,6 +65,12 @@ public class Main {
             System.out.println(subtask);
         }
 
-        System.out.println("История задач : " + manager.history()+ "\n");
+        System.out.println("История задач : " + manager.history());
+
+        System.out.println("Список приоритетных задач: ");
+        List<Task> subtask = manager.getPrioritizedTasks();
+        for (Task s : subtask) {
+            System.out.println(s);
+        }
     }
 }

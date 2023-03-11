@@ -4,10 +4,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import EnumTasks.Status;
-import Tasks.Task;
-import Tasks.Subtask;
-import Tasks.Epic;
+import enumTask.Status;
+import task.Task;
+import task.Subtask;
+import task.Epic;
 
 
 public class InMemoryTaskManager implements TaskManager {
@@ -17,11 +17,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
-        this.historyManager = Managers.getDefaultHistory();
-    }
-
-    public InMemoryTaskManager() {
-        this.historyManager = Managers.getDefaultHistory();
     }
 
     @Override
@@ -39,7 +34,11 @@ public class InMemoryTaskManager implements TaskManager {
         return subtasks;
     }
 
-    public HistoryManager historyManager;
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    private final HistoryManager historyManager;
     private final Comparator<Task> taskComparator = Comparator.comparing(Task::getStartTime);
     private final Set<Task> prioritizedTasks = new TreeSet<>(taskComparator);
     private int counterId = 0;
@@ -99,8 +98,7 @@ public class InMemoryTaskManager implements TaskManager {
             int id = ++counterId;
             task.setId(id);
             tasks.put(id, task);
-            timeReconciliation(task);
-            prioritizedTasks.add(task);
+            addNewPrioritizedTask(task);
         } else
             System.out.println("Задача не создана");
     }
@@ -111,7 +109,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         if (task != null && tasks.containsKey(task.getId())) {
-            timeReconciliation(task);
+            addNewPrioritizedTask(task);
             tasks.put(task.getId(), task);
         } else
             System.out.println("Не удалось обновить задачу");
@@ -190,8 +188,6 @@ public class InMemoryTaskManager implements TaskManager {
             int id = ++counterId;
             epic.setId(id);
             epics.put(id, epic);
-            timeReconciliation(epic);
-            prioritizedTasks.add(epic);
         } else
             System.out.println("Эпик не создан");
     }
@@ -347,7 +343,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtask.setId(Id);
             Epic epic = epics.get(subtask.getEpicId());
             if (epic != null) {
-                timeReconciliation(subtask);
+                addNewPrioritizedTask(subtask);
                 subtasks.put(Id, subtask);
                 epic.setSubtasksId(Id);
                 updateStatusEpic(epic);
@@ -365,7 +361,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubtask(Subtask subtask) {
         if (subtasks.containsKey(subtask.getId())) {
-            timeReconciliation(subtask);
+            addNewPrioritizedTask(subtask);
             subtasks.put(subtask.getId(), subtask);
             Epic epic = epics.get(subtask.getEpicId());
             updateStatusEpic(epic);
@@ -442,13 +438,15 @@ public class InMemoryTaskManager implements TaskManager {
             boolean conditionStartTime = task.getStartTime().isEqual(prioritizedTask.getStartTime());
             boolean conditionEndTime = task.getEndTime().isEqual(prioritizedTask.getEndTime());
             if (conditionStartTime && conditionEndTime) {
-                    throw new ManagerValidateException(
-                             "Ошибка пересечения задач по времени");
+                return;
                 }
             }
         }
 
-
+    private void addNewPrioritizedTask(Task task) {
+        prioritizedTasks.add(task);
+        timeReconciliation(task);
+    }
     @Override
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);

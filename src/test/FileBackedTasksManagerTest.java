@@ -1,11 +1,10 @@
-package TestProject;
+package test;
 
-import EnumTasks.Status;
-import Tasks.Epic;
-import Tasks.Subtask;
-import Tasks.Task;
+import enumTask.Status;
+import task.Epic;
+import task.Subtask;
+import task.Task;
 import manager.FileBackedTasksManager;
-import manager.Managers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -109,7 +108,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     }
     @Test
     public void shouldSaveAndLoadIfTasksOrEpicsOrSubtasksIsEmpty() {
-        FileBackedTasksManager fileManager = new FileBackedTasksManager(Managers.getDefaultHistory(),file);
+        FileBackedTasksManager fileManager = new FileBackedTasksManager(file);
         fileManager.save();
         FileBackedTasksManager.loadFromFile(file);
         assertEquals(Collections.EMPTY_LIST, manager.getTasks());
