@@ -67,10 +67,5 @@ public class Main {
 
         System.out.println("История задач : " + manager.history());
 
-        System.out.println("Список приоритетных задач: ");
-        List<Task> subtask = manager.getPrioritizedTasks();
-        for (Task s : subtask) {
-            System.out.println(s);
-        }
     }
 }
