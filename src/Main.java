@@ -1,4 +1,3 @@
-package main;
 
 import manager.FileBackedTasksManager;
 import enumTask.Status;
@@ -19,26 +18,25 @@ public class Main {
 
         manager.creationTask(
                 new Task("Сходить в магазин", "Уложиться в 2 тыс.руб.", Status.NEW,
-                        LocalDateTime.of(2019, Month.APRIL, 10, 15, 50), Duration.ofMinutes(10)));
+                        LocalDateTime.of(2019, Month.APRIL, 10, 15, 0), Duration.ofMinutes(10)));
         manager.creationTask(
                 new Task("Разобраться в чулане", "Выкинуть старые вещи", Status.IN_PROGRESS,
-                        LocalDateTime.of(2021, Month.MARCH, 10, 15, 40), Duration.ofMinutes(20)));
+                        LocalDateTime.of(2021, Month.MARCH, 10, 15, 0), Duration.ofMinutes(20)));
         manager.creationEpic(
                 new Epic("Сделать 7-й проект в Я.Практикуме", "Сдать любой ценой!", Status.NEW,
-                        LocalDateTime.of(2022, Month.JANUARY, 5, 15, 5), Duration.ofMinutes(1000)));
+                        LocalDateTime.of(2023, Month.APRIL, 10, 15, 0), Duration.ofMinutes(30)));
         manager.creationEpic(
                 new Epic("Каникулы", "Отдохнуть от учебы", Status.NEW,
-                        LocalDateTime.of(2022, Month.JANUARY, 10, 15, 20), Duration.ofMinutes(2000)));
+                        LocalDateTime.of(2022, Month.APRIL, 10, 15, 0), Duration.ofMinutes(40)));
 
         manager.creationSubtask(new Subtask("Разобраться в комментариях ревьюера",
-                "Исправить ошибки", Status.NEW, 3, LocalDateTime.of(2022, Month.APRIL, 13,
-                22, 0), Duration.ofMinutes(50)));
+                "Исправить ошибки", Status.NEW, 3, LocalDateTime.now(), Duration.ofMinutes(50)));
         manager.creationSubtask(
                 new Subtask("Повторно отправить на ревью", "Добавить commit", Status.NEW,
-                        3, LocalDateTime.of(2022, Month.MARCH, 13, 22, 10), Duration.ofMinutes(600)));
+                        3, LocalDateTime.of(2022, Month.MARCH, 13, 22, 0), Duration.ofMinutes(60)));
         manager.creationSubtask(
                 new Subtask("Порадоваться сдаче проекта", "Отпраздновать сдачу", Status.NEW,
-                        4, LocalDateTime.of(2022, Month.MAY, 2, 15, 12), Duration.ofMinutes(700)));
+                        4, LocalDateTime.of(2022, Month.MAY, 2, 15, 0), Duration.ofMinutes(70)));
 
         manager.getTaskById(1);
         manager.getTaskById(2);

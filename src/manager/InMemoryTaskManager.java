@@ -18,6 +18,8 @@ public class InMemoryTaskManager implements TaskManager {
     public InMemoryTaskManager() {
         this.historyManager = Managers.getDefaultHistory();
     }
+
+
     @Override
     public Map<Integer, Task> getTasksMap() {
         return tasks;
@@ -41,7 +43,6 @@ public class InMemoryTaskManager implements TaskManager {
     private final Comparator<Task> taskComparator = Comparator.comparing(Task::getStartTime);
     private final Set<Task> prioritizedTasks = new TreeSet<>(taskComparator);
     private int counterId = 0;
-
 
     /*
       Tasks ↓ ↓ ↓
@@ -400,17 +401,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void timeReconciliation(Task task) throws ManagerValidateException {
-        LocalDateTime startTime = task.getStartTime();
-
-        for (Task prioritizedTask : prioritizedTasks) {
-            if (startTime == null && prioritizedTask.getStartTime() == null) {
-                return;
-            }
-            boolean conditionStartTime = task.getStartTime().isEqual(prioritizedTask.getStartTime());
-            boolean conditionEndTime = task.getEndTime().isEqual(prioritizedTask.getStartTime());
-            if (conditionStartTime && conditionEndTime) {
-                throw new RuntimeException("Ошибка пересечения задач по времени");
+    public void timeReconciliation(Task task) {
+        List<Task> list = new ArrayList<>(getPrioritizedTasks());
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(i).getStartTime().isBefore(list.get(i - 1).getEndTime())) {
+                throw new ManagerSaveException("Ошибка пересечения задач по времени");
             }
         }
     }

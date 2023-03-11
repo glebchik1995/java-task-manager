@@ -124,8 +124,6 @@ public class Task {
     public String toString() {
         return getId() + "," + Types.TASK+ "," +
                 getTitle() + "," + getStatus() + "," + getDescription() + "," +
-                startTime.format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")) +
-                "," + getEndTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")) +
-                "," + duration.toMinutes();
+                startTime.format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")) + "," + getEndTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")) + "," + duration.toMinutes();
     }
 }
