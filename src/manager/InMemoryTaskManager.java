@@ -350,7 +350,7 @@ public class InMemoryTaskManager implements TaskManager {
                 updateStatusEpic(epic);
                 updateTimeEpic(epic);
             } else {
-                System.out.println("Epic not found");
+                System.out.println("Эпик не создан");
             }
         }
         return subtask;
@@ -405,7 +405,7 @@ public class InMemoryTaskManager implements TaskManager {
         List<Task> list = new ArrayList<>(getPrioritizedTasks());
         for (int i = 1; i < list.size(); i++) {
             if (list.get(i).getStartTime().isBefore(list.get(i - 1).getEndTime())) {
-                throw new ManagerSaveException("Ошибка пересечения задач по времени");
+                throw new ManagerValidateException("Ошибка пересечения задач по времени");
             }
         }
     }
