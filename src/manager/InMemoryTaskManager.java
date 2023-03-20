@@ -1,13 +1,14 @@
 package manager;
 
+import enumTask.Status;
+import exception.ManagerValidateException;
+import task.Epic;
+import task.Subtask;
+import task.Task;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-
-import enumTask.Status;
-import task.Task;
-import task.Subtask;
-import task.Epic;
 
 
 public class InMemoryTaskManager implements TaskManager {
@@ -18,7 +19,6 @@ public class InMemoryTaskManager implements TaskManager {
     public InMemoryTaskManager() {
         this.historyManager = Managers.getDefaultHistory();
     }
-
 
     @Override
     public Map<Integer, Task> getTasksMap() {
@@ -59,7 +59,6 @@ public class InMemoryTaskManager implements TaskManager {
             return Collections.emptyList();
         }
     }
-
 
     /**
      * // 2. Удаление всех задач ↓

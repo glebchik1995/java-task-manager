@@ -1,5 +1,6 @@
 package manager;
 
+import exception.ManagerSaveException;
 import task.Epic;
 import enumTask.Status;
 import task.Subtask;
@@ -20,13 +21,13 @@ import java.util.Map;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    private final File file;
+    private File file;
 
     List<Integer> historyList = new ArrayList<>();
 
     public FileBackedTasksManager(File file) throws ManagerSaveException {
         this.file = file;
-        file = new File("sprint7.csv");
+        file = new File("CSV\\practicum.csv");
         if (!file.exists()) {
             try {
                 Files.createFile(Paths.get(String.valueOf(file)));
@@ -34,6 +35,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 throw new ManagerSaveException("Файл не удалось создать.");
             }
         }
+    }
+    public FileBackedTasksManager() {
     }
 
     public void save() throws ManagerSaveException {

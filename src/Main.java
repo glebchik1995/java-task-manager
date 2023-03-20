@@ -1,70 +1,77 @@
-
-import manager.FileBackedTasksManager;
 import enumTask.Status;
+import manager.HttpTaskManager;
+import http.HttpTaskServer;
+import http.KVServer;
+import task.Epic;
 import task.Subtask;
 import task.Task;
-import task.Epic;
 
-import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
 
-        FileBackedTasksManager manager = new FileBackedTasksManager(new File("sprint7.csv"));
+    public static void main(String[] args) throws IOException {
+        new KVServer().start();
+        HttpTaskManager manager = new HttpTaskManager("http://localhost:8080/");
+        HttpTaskServer server = new HttpTaskServer();
+
+//                FileBackedTasksManager manager = new FileBackedTasksManager(new File("practicum.csv"));
 
         manager.creationTask(
-                new Task("РЎС…РѕРґРёС‚СЊ РІ РјР°РіР°Р·РёРЅ", "РЈР»РѕР¶РёС‚СЊСЃСЏ РІ 2 С‚С‹СЃ.СЂСѓР±.", Status.NEW,
+                new Task("Сходить в магазин", "Уложиться в 2 тыс.руб.", Status.NEW,
                         LocalDateTime.of(2019, Month.APRIL, 10, 15, 0), Duration.ofMinutes(10)));
         manager.creationTask(
-                new Task("Р Р°Р·РѕР±СЂР°С‚СЊСЃСЏ РІ С‡СѓР»Р°РЅРµ", "Р’С‹РєРёРЅСѓС‚СЊ СЃС‚Р°СЂС‹Рµ РІРµС‰Рё", Status.IN_PROGRESS,
+                new Task("Разобраться в чулане", "Выкинуть старые вещи", Status.IN_PROGRESS,
                         LocalDateTime.of(2021, Month.MARCH, 10, 15, 0), Duration.ofMinutes(20)));
         manager.creationEpic(
-                new Epic("РЎРґРµР»Р°С‚СЊ 7-Р№ РїСЂРѕРµРєС‚ РІ РЇ.РџСЂР°РєС‚РёРєСѓРјРµ", "РЎРґР°С‚СЊ Р»СЋР±РѕР№ С†РµРЅРѕР№!", Status.NEW,
+                new Epic("Сделать 7-й проект в Я.Практикуме", "Сдать любой ценой!", Status.NEW,
                         LocalDateTime.of(2023, Month.APRIL, 10, 15, 0), Duration.ofMinutes(30)));
         manager.creationEpic(
-                new Epic("РљР°РЅРёРєСѓР»С‹", "РћС‚РґРѕС…РЅСѓС‚СЊ РѕС‚ СѓС‡РµР±С‹", Status.NEW,
+                new Epic("Каникулы", "Отдохнуть от учебы", Status.NEW,
                         LocalDateTime.of(2022, Month.APRIL, 10, 15, 0), Duration.ofMinutes(40)));
 
-        manager.creationSubtask(new Subtask("Р Р°Р·РѕР±СЂР°С‚СЊСЃСЏ РІ РєРѕРјРјРµРЅС‚Р°СЂРёСЏС… СЂРµРІСЊСЋРµСЂР°",
-                "РСЃРїСЂР°РІРёС‚СЊ РѕС€РёР±РєРё", Status.NEW, 3, LocalDateTime.now(), Duration.ofMinutes(50)));
+        manager.creationSubtask(new Subtask("Разобраться в комментариях ревьюера",
+                "Исправить ошибки", Status.NEW, 3, LocalDateTime.now(), Duration.ofMinutes(50)));
         manager.creationSubtask(
-                new Subtask("РџРѕРІС‚РѕСЂРЅРѕ РѕС‚РїСЂР°РІРёС‚СЊ РЅР° СЂРµРІСЊСЋ", "Р”РѕР±Р°РІРёС‚СЊ commit", Status.NEW,
+                new Subtask("Повторно отправить на ревью", "Добавить commit", Status.NEW,
                         3, LocalDateTime.of(2022, Month.MARCH, 13, 22, 0), Duration.ofMinutes(60)));
         manager.creationSubtask(
-                new Subtask("РџРѕСЂР°РґРѕРІР°С‚СЊСЃСЏ СЃРґР°С‡Рµ РїСЂРѕРµРєС‚Р°", "РћС‚РїСЂР°Р·РґРЅРѕРІР°С‚СЊ СЃРґР°С‡Сѓ", Status.NEW,
+                new Subtask("Порадоваться сдаче проекта", "Отпраздновать сдачу", Status.NEW,
                         4, LocalDateTime.of(2022, Month.MAY, 2, 15, 0), Duration.ofMinutes(70)));
 
         manager.getTaskById(1);
         manager.getTaskById(2);
         manager.getEpicById(3);
         manager.getSubtaskById(5);
+        server.start();
+        manager.load();
 
 
-        FileBackedTasksManager.loadFromFile(new File("sprint7.csv"));
+//        FileBackedTasksManager.loadFromFile(new File("practicum.csv"));
         System.out.println();
-        System.out.println("РЎРїРёСЃРѕРє РІСЃРµС… Р·Р°РґР°С‡: ");
+        System.out.println("Список всех задач: ");
         List<Task> tasks = manager.getTasks();
         for (Task task : tasks) {
             System.out.println(task);
         }
 
-        System.out.println("РЎРїРёСЃРѕРє РІСЃРµС… СЌРїРёРєРѕРІ: ");
+        System.out.println("Список всех эпиков: ");
         List<Epic> epics = manager.getEpics();
         for (Epic epic : epics) {
             System.out.println(epic);
         }
 
-        System.out.println("РЎРїРёСЃРѕРє РІСЃРµС… РїРѕРґР·Р°РґР°С‡: ");
+        System.out.println("Список всех подзадач: ");
         List<Subtask> subtasks = manager.getSubtasks();
         for (Subtask subtask : subtasks) {
             System.out.println(subtask);
         }
 
-        System.out.println("РСЃС‚РѕСЂРёСЏ Р·Р°РґР°С‡ : " + manager.history());
-
+        System.out.println("История задач : " + manager.history());
+        server.stop();
     }
 }
