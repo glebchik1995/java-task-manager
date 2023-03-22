@@ -88,39 +88,5 @@ public class HttpTaskManager extends FileBackedTasksManager {
             historyManager.add(getTaskById(taskId));
         }
 
-
-
-
-
-//        String gsonTasks = client.load("tasks/task");
-//        Type typeTask = new TypeToken<Map<Integer, Task>>() {
-//        }.getType();
-//        Map<Integer, Task> task = gson.fromJson(gsonTasks, typeTask);
-//        tasks.putAll(task);
-//
-//        String gsonEpics = client.load("tasks/epic");
-//        Type typeEpic = new TypeToken<Map<Integer, Epic>>() {
-//        }.getType();
-//        Map<Integer, Epic> epic = gson.fromJson(gsonEpics, typeEpic);
-//        epics.putAll(epic);
-//
-//        String gsonSubTasks = client.load("tasks/subtask");
-//        Type typeSubTask = new TypeToken<Map<Integer, Subtask>>() {
-//        }.getType();
-//        Map<Integer, Subtask> subtask = gson.fromJson(gsonSubTasks, typeSubTask);
-//        subtasks.putAll(subtask);
-//
-//        String gsonHistory = client.load("tasks/history");
-//        Type typeHistory = new TypeToken<List<Task>>() {
-//        }.getType();
-//        List<Task> historyOfTasks = gson.fromJson(gsonHistory, typeHistory);
-//        history().addAll(historyOfTasks);
-//
-//        String prioritizedTasks = client.load("tasks");
-//        Type typePriorityTask = new TypeToken<List<Task>>() {
-//        }.getType();
-//        List<Task> priorityTask = gson.fromJson(prioritizedTasks, typePriorityTask);
-//        getPrioritizedTasks().addAll(priorityTask);
-
     }
 }
