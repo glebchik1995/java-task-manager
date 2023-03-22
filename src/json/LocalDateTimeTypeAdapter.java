@@ -1,23 +1,22 @@
 package json;
-
-import com.google.gson.*;
-
-import java.lang.reflect.Type;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class LocalDateTimeTypeAdapter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
+public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
+    protected static final DateTimeFormatter formatterWriter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+    protected static final DateTimeFormatter formatterReader = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
 
     @Override
-    public JsonElement serialize(LocalDateTime localDateTime, Type srcType, JsonSerializationContext context) {
-        return new JsonPrimitive(formatter.format(localDateTime));
+    public void write(final JsonWriter jsonWriter, final LocalDateTime localDateTime) throws IOException {
+        jsonWriter.value(localDateTime.format(formatterWriter));
     }
 
     @Override
-    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException {
-        return LocalDateTime.parse(json.getAsString(),
-                DateTimeFormatter.ofPattern("HH/mm/dd/MM/yyyy"));
+    public LocalDateTime read(final JsonReader jsonReader) throws IOException {
+        return LocalDateTime.parse(jsonReader.nextString(), formatterReader);
     }
 }
