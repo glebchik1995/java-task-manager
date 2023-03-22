@@ -11,20 +11,20 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class KVTaskClient {
-    private final String apiToken;
+    private String apiToken;
 
     private final String url;
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    public KVTaskClient(String url) {
-        this.url = url;
+    public KVTaskClient(int port) {
+        url = "http://localhost:" + port;
         apiToken = register(url);
     }
 
     private String register(String url) {
         HttpClient client = HttpClient.newHttpClient();
-        URI uri = URI.create(url + "register/");
+        URI uri = URI.create(url + "/register");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .GET()
@@ -36,16 +36,16 @@ public class KVTaskClient {
             HttpResponse<String> response = client.send(request, handler);
             System.out.println("Код ответа: " + response.statusCode());
             System.out.println("Тело ответа: " + response.body());
-            return response.body();
+            apiToken = response.body();
         } catch (Exception exception) {
             throw new ManagerSaveException("Сообщение об ошибке регистрации API_TOKEN" + exception.getMessage());
-
         }
+        return apiToken;
     }
 
     public void save(String key, String value) {
         HttpClient client = HttpClient.newHttpClient();
-        URI uri = URI.create(url + "save/" + key + "?API_TOKEN=" + apiToken);
+        URI uri = URI.create(url + "/save/" + key + "?API_TOKEN=" + apiToken);
         HttpRequest.BodyPublishers.ofString(value, DEFAULT_CHARSET);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
@@ -60,18 +60,19 @@ public class KVTaskClient {
         }
     }
 
-    public void load(String key) {
+    public String load(String key) {
         HttpClient client = HttpClient.newHttpClient();
-        URI uri = URI.create(url + "load/" + key + "?API_TOKEN=" + apiToken);
+        URI uri = URI.create(url + "/load/" + key + "?API_TOKEN=" + apiToken);
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(uri)
                 .header("Content-type", "application/json")
                 .version(HttpClient.Version.HTTP_1_1)
                 .build();
+        HttpResponse<String> response;
         try {
             HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
-            HttpResponse<String> response = client.send(request, handler);
+            response = client.send(request, handler);
             System.out.println("Код ответа: " + response.statusCode());
             System.out.println("Тело ответа: " + response.body());
             response.body();
@@ -79,6 +80,7 @@ public class KVTaskClient {
             throw new ManagerSaveException("Сообщение об ошибке загрузки" + exception.getMessage());
 
         }
+        return response.body();
     }
 }
 

@@ -1,5 +1,7 @@
 package manager;
 
+import http.KVServer;
+
 public class Managers {
 
     public static HistoryManager getDefaultHistory() {
@@ -7,6 +9,6 @@ public class Managers {
     }
 
     public static TaskManager getDefault(){
-        return new HttpTaskManager("http://localhost:8078/");
+        return new HttpTaskManager(KVServer.PORT);
     }
 }

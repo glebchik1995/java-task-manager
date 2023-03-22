@@ -14,50 +14,73 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * Постман: <a href="https://www.getpostman.com/collections/a83b61d9e1c81c10575c">...</a>
  */
 public class KVServer {
-    public static final int PORT = 8080;
+    public static int PORT = 8080;
+
     private final String apiToken;
     private final HttpServer server;
     private final Map<String, String> data = new HashMap<>();
 
     public KVServer() throws IOException {
-        apiToken = generateApiToken();
         server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         server.createContext("/register", this::register);
         server.createContext("/save", this::save);
         server.createContext("/load", this::load);
+        apiToken = generateApiToken();
     }
 
-    private void load(HttpExchange h) {
+    private void load(HttpExchange h) throws IOException {
         try (h) {
+
             System.out.println("\n/load");
-            if (hasAuth(h)) {
-                System.out.println("Запрос не авторизован, нужен параметр в query API_TOKEN со значением апи-ключа");
+
+            if (!hasAuth(h)) {
+
+                System.out.println("Запрос не авторизован, нужен параметр в query API_TOKEN со значением API ключа");
+
                 h.sendResponseHeaders(403, 0);
+
                 return;
             }
+
             if ("GET".equals(h.getRequestMethod())) {
-                String key = h.getRequestURI().getPath().substring(("/load/").length());
+
+                String key = h.getRequestURI().getPath().substring("/load/".length());
+
                 if (key.isEmpty()) {
-                    System.out.println("Key для сохранения пустой. key указывается в пути: /load/{key}");
+
+                    System.out.println("Ключ(key) для загрузки пустой. Ключ(key) указывается в пути: /load/{key}");
+
                     h.sendResponseHeaders(400, 0);
+
                     return;
                 }
-                if (data.get(key).isEmpty()) {
-                    System.out.println("Не могу достать данные для ключа '" + key + "', данные отсутствуют");
+
+                String value = data.get(key);
+
+                if (value.isEmpty()) {
+
+                    System.out.println("Значение(value) для загрузки пустое. Значение(value) указывается в теле запроса");
+
                     h.sendResponseHeaders(400, 0);
+
                     return;
                 }
-                sendText(h, data.get(key));
-                System.out.println("Значение для ключа " + key + " успешно получено!");
+
+                sendText(h, value);
+
+                System.out.println("Значение для ключа " + key + " успешно обновлено!");
+
                 h.sendResponseHeaders(200, 0);
+
             } else {
+
                 System.out.println("/load ждёт GET-запрос, а получил: " + h.getRequestMethod());
+
                 h.sendResponseHeaders(405, 0);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
+
 
     private void save(HttpExchange h) throws IOException {
         try (h) {
@@ -108,8 +131,11 @@ public class KVServer {
         System.out.println("API_TOKEN: " + apiToken);
         server.start();
     }
+
     public void stop() {
         server.stop(0);
+        System.out.println("KVServer остановлен на " + PORT + " порту!");
+
     }
 
     private String generateApiToken() {

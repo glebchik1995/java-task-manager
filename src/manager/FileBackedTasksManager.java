@@ -46,16 +46,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
             Map<Integer, String> allTasks = new HashMap<>();
 
-            for (Integer id : getTasksMap().keySet()) {
-                allTasks.put(id, getTasksMap().get(id).toString());
+            for (Integer id : tasks.keySet()) {
+                allTasks.put(id, tasks.get(id).toString());
             }
 
-            for (Integer id : getEpicsMap().keySet()) {
-                allTasks.put(id, getEpicsMap().get(id).toString());
+            for (Integer id : epics.keySet()) {
+                allTasks.put(id, epics.get(id).toString());
             }
 
-            for (Integer id : getSubtasksMap().keySet()) {
-                allTasks.put(id, getSubtasksMap().get(id).toString());
+            for (Integer id : subtasks.keySet()) {
+                allTasks.put(id, subtasks.get(id).toString());
             }
 
             for (String value : allTasks.values()) {
@@ -95,7 +95,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             return null;
     }
 
-    private static String historyToString(HistoryManager manager) {
+    protected static String historyToString(HistoryManager manager) {
         List<String> list = new ArrayList<>();
         for (Task task : manager.getHistory()) {
             list.add(String.valueOf(task.getId()));
@@ -131,11 +131,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             if (task != null) {
                 if (task.getType() == Types.TASK) {
 
-                    fileBackedTasksManager.getTasksMap().put(task.getId(),task);
+                    fileBackedTasksManager.tasks.put(task.getId(),task);
                 } else if (task.getType() == Types.EPIC) {
-                    fileBackedTasksManager.getEpicsMap().put(task.getId(),(Epic)task);
+                    fileBackedTasksManager.epics.put(task.getId(),(Epic)task);
                 } else if (task.getType() == Types.SUBTASK) {
-                    fileBackedTasksManager.getSubtasksMap().put(task.getId(),(Subtask)task);
+                    fileBackedTasksManager.subtasks.put(task.getId(),(Subtask)task);
                 }
             }
 

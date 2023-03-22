@@ -1,7 +1,8 @@
 import enumTask.Status;
-import manager.HttpTaskManager;
-import http.HttpTaskServer;
 import http.KVServer;
+import manager.HttpTaskManager;
+import manager.Managers;
+import manager.TaskManager;
 import task.Epic;
 import task.Subtask;
 import task.Task;
@@ -16,10 +17,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         new KVServer().start();
-        HttpTaskManager manager = new HttpTaskManager("http://localhost:8080/");
-        HttpTaskServer server = new HttpTaskServer();
-
-//                FileBackedTasksManager manager = new FileBackedTasksManager(new File("practicum.csv"));
+        TaskManager manager = Managers.getDefault();
 
         manager.creationTask(
                 new Task("—ходить в магазин", "”ложитьс€ в 2 тыс.руб.", Status.NEW,
@@ -47,8 +45,6 @@ public class Main {
         manager.getTaskById(2);
         manager.getEpicById(3);
         manager.getSubtaskById(5);
-        server.start();
-        manager.load();
 
 
 //        FileBackedTasksManager.loadFromFile(new File("practicum.csv"));
@@ -72,6 +68,9 @@ public class Main {
         }
 
         System.out.println("»стори€ задач : " + manager.history());
-        server.stop();
+
+
+        HttpTaskManager httpTaskManager = new HttpTaskManager(KVServer.PORT);
+        httpTaskManager.load();
     }
 }

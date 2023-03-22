@@ -1,11 +1,11 @@
 import enumTask.Status;
-import task.Epic;
-import task.Subtask;
-import task.Task;
 import manager.FileBackedTasksManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import task.Epic;
+import task.Subtask;
+import task.Task;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -71,13 +70,13 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
 
 
         assertNotNull(fileBackedTaskManager.history());
-        assertEquals(new ArrayList<>(Map.of(task.getId(), task).values()),
-                new ArrayList<>(fileBackedTaskManager.getTasks()));
+        assertEquals(Map.of(task.getId(), task).values(),
+                fileBackedTaskManager.getTasks());
 
-        assertEquals(new ArrayList<>(Map.of(epic.getId(), epic).values()),
-                new ArrayList<>(fileBackedTaskManager.getEpics()));
-        assertEquals(new ArrayList<>(Map.of(subtask.getId(), subtask).values()),
-                new ArrayList<>(fileBackedTaskManager.getSubtasks()));
+        assertEquals(Map.of(epic.getId(), epic).values(),
+                fileBackedTaskManager.getEpics());
+        assertEquals(Map.of(subtask.getId(), subtask).values(),
+               fileBackedTaskManager.getSubtasks());
         assertEquals(List.of(task, subtask, epic), fileBackedTaskManager.history());
 
     }

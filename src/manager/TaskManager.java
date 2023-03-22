@@ -5,7 +5,6 @@ import task.Subtask;
 import task.Epic;
 
 import java.util.List;
-import java.util.Map;
 
 public interface TaskManager {
 
@@ -64,11 +63,11 @@ public interface TaskManager {
 
     Subtask creationSubtask(Subtask subtask);
 
-    Map<Integer, Epic> getEpicsMap();
-
-    Map<Integer, Task> getTasksMap();
-
-    Map<Integer, Subtask> getSubtasksMap();
+//    Map<Integer, Epic> getEpicsMap();
+//
+//    Map<Integer, Task> getTasksMap();
+//
+//    Map<Integer, Subtask> getSubtasksMap();
 
     void updateSubtask(Subtask subtask);
 

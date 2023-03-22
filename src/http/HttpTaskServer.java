@@ -2,7 +2,6 @@ package http;
 
 import com.sun.net.httpserver.HttpServer;
 import handler.EpicHandler;
-import handler.HistoryHandler;
 import handler.SubtaskHandler;
 import handler.TaskHandler;
 import manager.Managers;
@@ -12,7 +11,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class HttpTaskServer {
-    public static final int PORT = 8088;
+    public static final int PORT = 8080;
     private final HttpServer server;
 
     public HttpTaskServer() throws IOException {
@@ -21,7 +20,6 @@ public class HttpTaskServer {
         server.createContext("/tasks/task", new TaskHandler(manager));
         server.createContext("/tasks/epic", new EpicHandler(manager));
         server.createContext("/tasks/subtask", new SubtaskHandler(manager));
-        server.createContext("/tasks/history", new HistoryHandler(manager));
     }
 
     public void start() {
@@ -32,5 +30,6 @@ public class HttpTaskServer {
 
     public void stop() {
         server.stop(0);
+        System.out.println("HTTP-сервер остановлен на " + PORT + " порту!");
     }
 }

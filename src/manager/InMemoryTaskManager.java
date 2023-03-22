@@ -12,36 +12,23 @@ import java.util.*;
 
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Subtask> subtasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
+
+    protected Set<Task> prioritizedTasks = new TreeSet<>(new ComparatorManager());
 
     public InMemoryTaskManager() {
         this.historyManager = Managers.getDefaultHistory();
     }
 
-    @Override
-    public Map<Integer, Task> getTasksMap() {
-        return tasks;
-    }
-
-    @Override
-    public Map<Integer, Epic> getEpicsMap() {
-        return epics;
-    }
-
-    @Override
-    public Map<Integer, Subtask> getSubtasksMap() {
-        return subtasks;
-    }
 
     public HistoryManager getHistoryManager() {
         return historyManager;
     }
 
-    private final HistoryManager historyManager;
-    private final Set<Task> prioritizedTasks = new TreeSet<>(new ComparatorManager());
-    private int counterId = 0;
+    protected HistoryManager historyManager;
+    protected int counterId = 0;
 
     /*
       Tasks ↓ ↓ ↓
@@ -59,6 +46,7 @@ public class InMemoryTaskManager implements TaskManager {
             return Collections.emptyList();
         }
     }
+
 
     /**
      * // 2. Удаление всех задач ↓
@@ -300,6 +288,7 @@ public class InMemoryTaskManager implements TaskManager {
             return Collections.emptyList();
         }
     }
+
 
     /**
      * 17. Удаление всех подзадач ↓

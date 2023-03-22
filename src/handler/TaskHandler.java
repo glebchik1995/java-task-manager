@@ -53,6 +53,15 @@ public class TaskHandler implements HttpHandler {
                     exchange.close();
                     break;
                 }
+                if (path.contains("history")) {
+                    List<Task> tasks = taskManager.getPrioritizedTasks();
+                    String body = gson.toJson(tasks);
+                    exchange.sendResponseHeaders(200, 0);
+                    try (OutputStream responseBody = exchange.getResponseBody()) {
+                        responseBody.write(body.getBytes(DEFAULT_CHARSET));
+                    }
+                    exchange.close();
+                }
                 List<Task> allTasks = taskManager.getTasks();
                 String body = gson.toJson(allTasks);
                 exchange.sendResponseHeaders(200, 0);

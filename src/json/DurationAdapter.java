@@ -1,20 +1,20 @@
 package json;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import com.google.gson.*;
 
-import java.io.IOException;
+import java.lang.reflect.Type;
 import java.time.Duration;
 
-public class DurationAdapter extends TypeAdapter<Duration> {
+public class DurationAdapter implements JsonSerializer<Duration>, JsonDeserializer<Duration> {
     @Override
-    public void write(JsonWriter jsonWriter, Duration duration) throws IOException {
-        jsonWriter.value(duration.toMinutes());
+    public JsonElement serialize(Duration duration, Type type, JsonSerializationContext jsonSerializationContext) {
+        return new JsonPrimitive(String.valueOf(duration));
     }
 
     @Override
-    public Duration read(JsonReader jsonReader) throws IOException {
-        return Duration.parse(jsonReader.nextString());
+    public Duration deserialize(JsonElement jsonElement, Type type,
+                                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        String asString = jsonElement.getAsString();
+        return Duration.parse(asString);
     }
 }
