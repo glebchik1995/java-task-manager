@@ -32,20 +32,19 @@ public class HttpTaskManager extends FileBackedTasksManager {
     @Override
     public void save() {
         String allTasks = gson.toJson(tasks);
-        client.save("tasks/task", allTasks);
-        String allEpics = gson.toJson(tasks);
-        client.save("tasks/epic", allEpics);
-        String allSubTasks = gson.toJson(getSubtasks());
-        client.save("tasks/subtask", allSubTasks);
+        client.save("tasks", allTasks);
+        String allEpics = gson.toJson(epics);
+        client.save("epics", allEpics);
+        String allSubTasks = gson.toJson(subtasks);
+        client.save("subtasks", allSubTasks);
         String history = gson.toJson(history());
-        client.save("tasks/history", history);
+        client.save("history", history);
         String prioritizedTask = gson.toJson(getPrioritizedTasks());
         client.save("tasks", prioritizedTask);
     }
-
     protected void addTasks(List<? extends Task> tasks) {
         for (Task task : tasks) {
-            final int id = task.getId();
+            int id = task.getId();
             if (id > counterId) {
                 counterId = id;
             }

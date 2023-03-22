@@ -56,29 +56,23 @@ public class KVTaskClient {
         try {
             client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (InterruptedException | IOException exception) {
-            throw new ManagerSaveException("Сообщение об ошибке сохранения" + exception.getMessage());
+            throw new ManagerSaveException("Сообщение об ошибке сохранения " + exception.getMessage());
         }
     }
 
     public String load(String key) {
-        HttpClient client = HttpClient.newHttpClient();
+        HttpClient httpClient = HttpClient.newHttpClient();
         URI uri = URI.create(url + "/load/" + key + "?API_TOKEN=" + apiToken);
         HttpRequest request = HttpRequest.newBuilder()
-                .GET()
                 .uri(uri)
-                .header("Content-type", "application/json")
-                .version(HttpClient.Version.HTTP_1_1)
+                .GET()
                 .build();
+
         HttpResponse<String> response;
         try {
-            HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
-            response = client.send(request, handler);
-            System.out.println("Код ответа: " + response.statusCode());
-            System.out.println("Тело ответа: " + response.body());
-            response.body();
-        } catch (Exception exception) {
-            throw new ManagerSaveException("Сообщение об ошибке загрузки" + exception.getMessage());
-
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException exception) {
+            throw new  ManagerSaveException("Сообщение об ошибке сохранения " + exception.getMessage());
         }
         return response.body();
     }
