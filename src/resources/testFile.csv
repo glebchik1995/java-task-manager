@@ -1,0 +1,8 @@
+ID, TYPE, TITLE, STATUS, DESCRIPTION, START TIME, DURATION, EPIC_ID
+4,TASK,Task_№1,NEW,Описание Task_№1,10:10 01.04.2022,30
+5,EPIC,Epic_№1,IN_PROGRESS,Описание Epic_№1,17:08 31.10.2023,0
+6,SUBTASK,Subtask_№1,NEW,Описание Subtask_№1 Epic_№1,17:08 31.10.2023,60,2
+4,TASK,Task_№1,NEW,Описание Task_№1,10:10 01.04.2022,30
+5,EPIC,Epic_№1,IN_PROGRESS,Описание Epic_№1,17:08 31.10.2023,0
+6,SUBTASK,Subtask_№1,NEW,Описание Subtask_№1 Epic_№1,17:08 31.10.2023,60,2
+
